@@ -1,6 +1,8 @@
 App Dev I Final Project
 
 
+figma link[https://jolt-nice-03858436.figma.site]
+
 
 Notes for Mr. Pisu:
 
