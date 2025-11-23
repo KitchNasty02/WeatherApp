@@ -9,9 +9,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "npm start --prefix client",
-    "server": "npm run dev --prefix server",
+    "server": "npm start --prefix server",
     "dev": "concurrently \"npm run server\" \"npm run client\""
- 
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
