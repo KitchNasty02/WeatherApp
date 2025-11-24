@@ -10,9 +10,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "npm start --prefix client",
     "server": "npm start --prefix server",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "mongo": "mongod -dbpath ./server/userData",
+    "dev": "concurrently \"npm run mongo\" \"npx wait-on tcp:27017 && npm run server\" \"npm run client\""
   },
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "concurrently": "^9.2.1",
+    "wait-on": "^9.0.3"
   }
 }
