@@ -17,3 +17,5 @@ For "npm run dev" to work
 - will need to install wait-on ("npm install --save-dev wait-on") in root directory
 - need to install concurrently ("npm install concurrently") in root directory
 
+Notes:
+- userData is empty in github but files are created when the mongodb server is started
