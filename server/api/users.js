@@ -2,8 +2,9 @@
 const User = require("../models/user");
 const router = require("express").Router();
 const fetch = require("node-fetch");
+require("dotenv").config();
 
-const WEATHER_API_KEY = "4e579bb25abb6eab140b31f6c7b42f1d";
+const WEATHER_API_KEY = process.env.API_KEY;
 const WEATHER_API_UNITS = "imperial";
 
 // creates new user on POST request
