@@ -1,7 +1,7 @@
-// tells how user data should look
 
 const db = require("../db");
 
+// user model in mongo collection
 const User = db.model("User", {
     fname: String,
     lname: String,
