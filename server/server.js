@@ -8,7 +8,7 @@ app.use(express.static("../client"));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
-app.use("/api", require("./api/api_user"));
+app.use("/api", require("./api/users"));
 
 
 
