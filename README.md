@@ -3,7 +3,7 @@ App Dev I Final Project
 
 Figma:
 - [WeatherApp v1](https://jolt-nice-03858436.figma.site)
-- [WeatherHub]((https://petal-cheer-82519435.figma.site/))
+- [WeatherHub](https://petal-cheer-82519435.figma.site/)
 
 
 
