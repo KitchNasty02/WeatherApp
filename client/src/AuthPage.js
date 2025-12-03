@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
-
+const LOGIN_URL = "http://localhost:3010/api/auth/login";
+const SIGNUP_URL = "http://localhost:3010/api/auth/signup";
 
 function AuthPage() {
     // used for users logging in
@@ -10,16 +11,14 @@ function AuthPage() {
     // used for users creating an account
     const [signupEmail, setSignupEmail] = useState("");
     const [signupPassword, setSignupPassword] = useState("");
-    const [signupName, setSignupName] = useState("");
+    const [signupFirstName, setSignupFirstName] = useState("");
+    const [signupLastName, setSignupLastName] = useState("");
 
     const [error, setError] = useState("");
 
-    // USE USEEFFECT? since we have to send async to API to authorized login
 
     // called when user presses login button
     const handleLogin = async (event) => {
-        console.log("login clicked");
-
         event.preventDefault();
         setError("");
         
@@ -29,33 +28,40 @@ function AuthPage() {
             return;
         }
 
-        // validate against backend
-        let user = {
-            email: loginEmail,
-            password: loginPassword
+        try {
+            // validate against backend
+            const response = await fetch(LOGIN_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: loginEmail,
+                    password: loginPassword
+                })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json(); // wait for backend error messages
+                setError(errData.message);
+                return;
+            }
+            
+            const data = await response.json();
+            console.log(data.message);
+        }
+        catch (err) {
+            // console.log(err);
+            setError(err.message);
         }
 
-        let authURL = "http://localhost:3010/api/auth";
-        const response = await fetch(authURL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(user)
-        }).then((res) => res.json()).catch(() => {
-            setError("Could not connect to auth server");
-        })
 
-        // let isLoggedIn = await response.json();
-        // // login
-        // console.log(`Is user logged in? ${isLoggedIn.message}`)
-
-
-    }
+    };
 
     // called when user presses signup button
     const handleSignup = (event) => {
-        console.log("signup clicked");
-
         event.preventDefault();
+
+        // TODO -- finish this to test with backend
+        // very similar to login
     }
 
 
@@ -75,8 +81,21 @@ function AuthPage() {
             </form>
 
             {/* this is for signup (do another form)*/}
-
-            <button type="submit" onClick={handleSignup}>Signup</button>
+            <form onSubmit={handleSignup}>
+                <label htmlFor="fname">First: </label>
+                <input name="fname" type="email" onChange={(e) => setSignupFirstName(e.target.value)} required></input>
+                <br/>
+                <label htmlFor="lname">Last: </label>
+                <input name="lname" type="email" onChange={(e) => setSignupLastName(e.target.value)} required></input>
+                <br/>
+                <label htmlFor="signupEmail">Email: </label>
+                <input name="signupEmail" type="email" onChange={(e) => setSignupEmail(e.target.value)} required></input>
+                <br/>
+                <label htmlFor="signupPassword">Password: </label>
+                <input name="signupPassword" type="password" onChange={(e) => setSignupPassword(e.target.value)} required></input>
+                <br/>
+                <button type="submit">Sign Up</button>
+            </form>
 
             <br/>
             <br/>

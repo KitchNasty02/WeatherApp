@@ -8,30 +8,57 @@ const WEATHER_API_KEY = process.env.API_KEY;
 const WEATHER_API_UNITS = "imperial";
 
 // creates new user on POST request
-router.post("/auth", (req, res) => {
+router.post("/auth/signup", async (req, res) => {
+    const { fname, lname, email, password } = req.body;
 
-    // // if email already exists in database
-    // if (req.body.email)
-
-    // // if password correct
-    // if ()
-    //  Send json message that they are logged in
+    const user = await User.findOne({email: email});
+    
+    if (user) {
+        res.status(401).json({message: "An account has already been created with this email"});
+    }
 
     // else make a new account
-    let user = new User({
+    let newUser = new User({
         fname: req.body.fname,
         lname: req.body.lname,
         email: req.body.email,
         password: req.body.password,
-        lastLoggedIn: req.body.lastLoggedIn, // Date.now(),
-        dateCreated: req.body.dateCreated,  // birthDate: new Date(req.body.birthDate)
+        lastLoggedIn: Date.now(),
+        dateCreated: Date.now(),
     });
 
-    user.save().then(user => {
-        res.status(201).json({message: `${user.fname} ${user.lname} account was saved`});
-    }).catch(err => {
-        res.status(401).json({error: err});
-    });
+    // newUser.save().then(user => {
+    //     res.status(201).json({message: `${newUser.fname} ${newUser.lname} account was saved`});
+    // }).catch(err => {
+    //     res.status(401).json({error: err});
+    // });
+    try {
+        const createdUser = await newUser.save();
+        res.status(201).json({message: `${createdUser.fname} ${createdUser.lname} account was saved`});
+    }
+    catch (err) {
+        res.status(401).json({message: err});
+    }
+});
+
+
+// checks if user can log in
+router.post("/auth/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({email: email})
+
+    if (!user) {
+        res.status(401).json({message: "Invalid credentials"});
+    }
+
+    if (user.password != password) {
+        res.status(401).json({message: "Incorrect Password"});
+    }
+
+    res.status(201).json({message: "User can login"});
+    //TODO CHANGE THE USERS LAST LOGGED IN TIME
+
 });
 
 
