@@ -40,16 +40,14 @@ function AuthPage() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(user)
+        }).then((res) => res.json()).catch((err) => {
+            setError(err);
         })
 
-        if (response.ok) {
-            let isLoggedIn = await response.json();
-            // login
-            console.log(`Is user logged in? ${isLoggedIn.message}`)
-        }
-        else {
-            setError(response.error);
-        }
+        // let isLoggedIn = await response.json();
+        // // login
+        // console.log(`Is user logged in? ${isLoggedIn.message}`)
+
 
     }
 
@@ -67,10 +65,10 @@ function AuthPage() {
             
             {/* this is for login */}
             <form onSubmit={handleLogin}>
-                <label for="loginEmail">Email: </label>
+                <label htmlFor="loginEmail">Email: </label>
                 <input name="loginEmail" type="email" onChange={(e) => setLoginEmail(e.target.value)} required></input>
                 <br/>
-                <label for="loginPassword">Password: </label>
+                <label htmlFor="loginPassword">Password: </label>
                 <input name="loginPassword" type="password" onChange={(e) => setLoginPassword(e.target.value)} required></input>
                 <br/>
                 <button type="submit">Login</button>
