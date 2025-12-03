@@ -10,6 +10,14 @@ const WEATHER_API_UNITS = "imperial";
 // creates new user on POST request
 router.post("/auth", (req, res) => {
 
+    // // if email already exists in database
+    // if (req.body.email)
+
+    // // if password correct
+    // if ()
+    //  Send json message that they are logged in
+
+    // else make a new account
     let user = new User({
         fname: req.body.fname,
         lname: req.body.lname,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 
@@ -30,11 +30,26 @@ function AuthPage() {
         }
 
         // validate against backend
-        let authURL = "http://localhost:3000/api/auth";
+        let user = {
+            email: loginEmail,
+            password: loginPassword
+        }
+
+        let authURL = "http://localhost:3010/api/auth";
         const response = await fetch(authURL, {
-            method: "POST" //maybe add more parameters
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user)
         })
-        // LOOK AT ZYBOOKS
+
+        if (response.ok) {
+            let isLoggedIn = await response.json();
+            // login
+            console.log(`Is user logged in? ${isLoggedIn.message}`)
+        }
+        else {
+            setError(response.error);
+        }
 
     }
 
@@ -49,9 +64,27 @@ function AuthPage() {
     return (
         <div>
             <h1>AuthPage</h1>
+            
+            {/* this is for login */}
+            <form onSubmit={handleLogin}>
+                <label for="loginEmail">Email: </label>
+                <input name="loginEmail" type="email" onChange={(e) => setLoginEmail(e.target.value)} required></input>
+                <br/>
+                <label for="loginPassword">Password: </label>
+                <input name="loginPassword" type="password" onChange={(e) => setLoginPassword(e.target.value)} required></input>
+                <br/>
+                <button type="submit">Login</button>
+            </form>
 
-            <button type="submit" onClick={handleLogin}>Login</button>
+            {/* this is for signup (do another form)*/}
+
             <button type="submit" onClick={handleSignup}>Signup</button>
+
+            <br/>
+            <br/>
+            <p>Email: {loginEmail}</p>
+            <p>Password: {loginPassword}</p>
+            <p>Error: {error}</p>
         </div>
     )
 
