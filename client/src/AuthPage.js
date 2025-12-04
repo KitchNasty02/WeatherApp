@@ -14,17 +14,18 @@ function AuthPage() {
     const [signupFirstName, setSignupFirstName] = useState("");
     const [signupLastName, setSignupLastName] = useState("");
 
-    const [error, setError] = useState("");
+    const [loginError, setLoginError] = useState("");
+    const [signupError, setSignupError] = useState("");
 
 
     // called when user presses login button
     const handleLogin = async (event) => {
         event.preventDefault();
-        setError("");
+        setLoginError("");
         
         // check fields are entered
         if (!loginEmail || !loginPassword) {
-            setError("Fill in all fields");
+            setLoginError("Fill in all fields");
             return;
         }
 
@@ -41,7 +42,7 @@ function AuthPage() {
 
             if (!response.ok) {
                 const errData = await response.json(); // wait for backend error messages
-                setError(errData.message);
+                setLoginError(errData.message);
                 return;
             }
             
@@ -50,18 +51,50 @@ function AuthPage() {
         }
         catch (err) {
             // console.log(err);
-            setError(err.message);
+            setLoginError(err.message);
         }
 
 
     };
 
     // called when user presses signup button
-    const handleSignup = (event) => {
+    const handleSignup = async (event) => {
         event.preventDefault();
+        setSignupError("");
 
-        // TODO -- finish this to test with backend
-        // very similar to login
+        // check fields are entered
+        if (!signupEmail || !signupPassword || !signupFirstName || !signupLastName) {
+            setSignupError("Fill in all fields");
+            return;
+        }
+
+        try {
+            // validate against backend
+            const response = await fetch(SIGNUP_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    fname: signupFirstName,
+                    lname: signupLastName,
+                    email: signupEmail,
+                    password: signupPassword
+                })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json(); // wait for backend error messages
+                setSignupError(errData.message);
+                return;
+            }
+            
+            const data = await response.json();
+            console.log(data.message);
+        }
+        catch (err) {
+            // console.log(err);
+            setSignupError(err.message);
+        }
+        
     }
 
 
@@ -80,13 +113,18 @@ function AuthPage() {
                 <button type="submit">Login</button>
             </form>
 
-            {/* this is for signup (do another form)*/}
+            <p>Error: {loginError}</p>
+
+            <br/>
+            <br/>
+
+            {/* this is for signup*/}
             <form onSubmit={handleSignup}>
                 <label htmlFor="fname">First: </label>
-                <input name="fname" type="email" onChange={(e) => setSignupFirstName(e.target.value)} required></input>
+                <input name="fname" type="text" onChange={(e) => setSignupFirstName(e.target.value)} required></input>
                 <br/>
                 <label htmlFor="lname">Last: </label>
-                <input name="lname" type="email" onChange={(e) => setSignupLastName(e.target.value)} required></input>
+                <input name="lname" type="text" onChange={(e) => setSignupLastName(e.target.value)} required></input>
                 <br/>
                 <label htmlFor="signupEmail">Email: </label>
                 <input name="signupEmail" type="email" onChange={(e) => setSignupEmail(e.target.value)} required></input>
@@ -99,9 +137,7 @@ function AuthPage() {
 
             <br/>
             <br/>
-            <p>Email: {loginEmail}</p>
-            <p>Password: {loginPassword}</p>
-            <p>Error: {error}</p>
+            <p>Error: {signupError}</p>
         </div>
     )
 
