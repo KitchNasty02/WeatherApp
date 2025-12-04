@@ -1,7 +1,7 @@
 /* ---------- Page Background ---------- */
 .weather-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #3ba4ff, #9b3bff);
+  background: linear-gradient(135deg, #00D1EF, #00BCAC, #4E3BEE);
   padding: 40px 60px;
   color: white;
   font-family: "Inter", sans-serif;
@@ -94,7 +94,7 @@
   padding: 14px 22px;
   border: none;
   border-radius: 10px;
-  background: linear-gradient(135deg, #3ba4ff, #9b3bff);
+  background: linear-gradient(135deg, #00D1EF, #00BCAC, #4E3BEE);
   color: white;
   font-size: 15px;
   cursor: pointer;

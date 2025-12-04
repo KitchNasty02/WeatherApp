@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #3ba4ff, #9b3bff);
+  background: linear-gradient(135deg, #00D1EF, #00BCAC, #4E3BEE);
   font-family: "Inter", sans-serif;
 }
 
@@ -23,7 +23,7 @@
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #4d8dff, #b84dff);
+  background: linear-gradient(135deg, #00D1EF, #00BCAC, #4E3BEE);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -103,7 +103,7 @@
 .auth-btn {
   width: 100%;
   padding: 14px 0;
-  background: linear-gradient(135deg, #3ba4ff, #9b3bff);
+  background: linear-gradient(135deg, #00D1EF, #00BCAC, #4E3BEE);
   color: white;
   border: none;
   border-radius: 10px;
