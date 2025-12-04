@@ -10,6 +10,8 @@ function WeatherPage() {
 
     const [searchError, setSearchError] = useState("");
 
+    const [weatherData, setWeatherData] = useState("");
+
     const handleSearch = async (event) => {
         console.log("Search pressed");
         event.preventDefault();
@@ -33,7 +35,8 @@ function WeatherPage() {
                 return;
             }
             
-            console.log(data.weather);
+            console.log("Weather Data", data.weather);
+            setWeatherData(data.weather);
 
         }
         catch (err) {
@@ -68,6 +71,8 @@ function WeatherPage() {
 
             <p>Zip Error: {zipError}</p>
             <p>Search Error: {searchError}</p>
+            {weatherData ? <p>Weather: {weatherData.main.temp}</p> : <p>No weather data</p>}
+
         </div>
     )
 

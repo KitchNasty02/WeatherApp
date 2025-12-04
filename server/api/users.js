@@ -74,11 +74,11 @@ router.get("/curweather", async (req, res) => {
 
     const weather = await fetch("http://api.openweathermap.org/data/2.5/weather?" + params);
         
-    if (!weather) {
+    if (!weather.ok) {
         res.status(400).json({message: "Weather API Failed"});
     }
 
-    const data = weather.json();
+    const data = await weather.json();
     const localWeather = {
         weather: data,
         zip: zip
