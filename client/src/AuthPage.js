@@ -1,156 +1,194 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import "./AuthPage.css";
 
 const LOGIN_URL = "http://localhost:3010/api/auth/login";
 const SIGNUP_URL = "http://localhost:3010/api/auth/signup";
 
 function AuthPage() {
-    // used for users logging in
-    const [loginEmail, setLoginEmail] = useState("");
-    const [loginPassword, setLoginPassword] = useState("");
+  const [activeTab, setActiveTab] = useState("login"); // login or signup
 
-    // used for users creating an account
-    const [signupEmail, setSignupEmail] = useState("");
-    const [signupPassword, setSignupPassword] = useState("");
-    const [signupFirstName, setSignupFirstName] = useState("");
-    const [signupLastName, setSignupLastName] = useState("");
+  // Login fields
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
 
-    const [loginError, setLoginError] = useState("");
-    const [signupError, setSignupError] = useState("");
+  // Signup fields
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [signupFirstName, setSignupFirstName] = useState("");
+  const [signupLastName, setSignupLastName] = useState("");
+  const [signupError, setSignupError] = useState("");
 
-    const [toWeatherPage, setToWeatherPage] = useState(null);
+  const [toWeatherPage, setToWeatherPage] = useState(false);
 
+  /* ---------------------- LOGIN HANDLER ---------------------- */
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoginError("");
 
-    // called when user presses login button
-    const handleLogin = async (event) => {
-        event.preventDefault();
-        setLoginError("");
-        
-        // check fields are entered
-        if (!loginEmail || !loginPassword) {
-            setLoginError("Fill in all fields");
-            return;
-        }
-
-        try {
-            // validate against backend
-            const response = await fetch(LOGIN_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    email: loginEmail,
-                    password: loginPassword
-                })
-            });
-
-            if (!response.ok) {
-                const errData = await response.json(); // wait for backend error messages
-                setLoginError(errData.message);
-                return;
-            }
-            
-            const data = await response.json();
-            console.log(data.message);
-            setToWeatherPage(true);
-        }
-        catch (err) {
-            // console.log(err);
-            setLoginError(err.message);
-        }
-
-
-    };
-
-    // called when user presses signup button
-    const handleSignup = async (event) => {
-        event.preventDefault();
-        setSignupError("");
-
-        // check fields are entered
-        if (!signupEmail || !signupPassword || !signupFirstName || !signupLastName) {
-            setSignupError("Fill in all fields");
-            return;
-        }
-
-        try {
-            // validate against backend
-            const response = await fetch(SIGNUP_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    fname: signupFirstName,
-                    lname: signupLastName,
-                    email: signupEmail,
-                    password: signupPassword
-                })
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                setSignupError(data.message);
-                return;
-            }
-            
-            console.log(data.message);
-            setToWeatherPage(true);
-        }
-        catch (err) {
-            // console.log(err);
-            setSignupError(err.message);
-        }
-        
+    if (!loginEmail || !loginPassword) {
+      setLoginError("Fill in all fields");
+      return;
     }
 
-    if (toWeatherPage) {
-        return <Navigate to="/weather"/>;
+    try {
+      const res = await fetch(LOGIN_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: loginEmail,
+          password: loginPassword,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) return setLoginError(data.message);
+
+      setToWeatherPage(true);
+    } catch (err) {
+      setLoginError(err.message);
+    }
+  };
+
+  /* ---------------------- SIGNUP HANDLER ---------------------- */
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setSignupError("");
+
+    if (
+      !signupEmail ||
+      !signupPassword ||
+      !signupFirstName ||
+      !signupLastName
+    ) {
+      setSignupError("Fill in all fields");
+      return;
     }
 
-    return (
-        <div>
-            <h1>AuthPage</h1>
-            
-            {/* this is for login */}
-            <form onSubmit={handleLogin}>
-                <label htmlFor="loginEmail">Email: </label>
-                <input name="loginEmail" type="email" onChange={(e) => setLoginEmail(e.target.value)} required></input>
-                <br/>
-                <label htmlFor="loginPassword">Password: </label>
-                <input name="loginPassword" type="password" onChange={(e) => setLoginPassword(e.target.value)} required></input>
-                <br/>
-                <button type="submit">Login</button>
-            </form>
+    try {
+      const res = await fetch(SIGNUP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fname: signupFirstName,
+          lname: signupLastName,
+          email: signupEmail,
+          password: signupPassword,
+        }),
+      });
 
-            <p>Error: {loginError}</p>
+      const data = await res.json();
+      if (!res.ok) return setSignupError(data.message);
 
-            <br/>
-            <br/>
+      setToWeatherPage(true);
+    } catch (err) {
+      setSignupError(err.message);
+    }
+  };
 
-            {/* this is for signup*/}
-            <form onSubmit={handleSignup}>
-                <label htmlFor="fname">First: </label>
-                <input name="fname" type="text" onChange={(e) => setSignupFirstName(e.target.value)} required></input>
-                <br/>
-                <label htmlFor="lname">Last: </label>
-                <input name="lname" type="text" onChange={(e) => setSignupLastName(e.target.value)} required></input>
-                <br/>
-                <label htmlFor="signupEmail">Email: </label>
-                <input name="signupEmail" type="email" onChange={(e) => setSignupEmail(e.target.value)} required></input>
-                <br/>
-                <label htmlFor="signupPassword">Password: </label>
-                <input name="signupPassword" type="password" onChange={(e) => setSignupPassword(e.target.value)} required></input>
-                <br/>
-                <button type="submit">Sign Up</button>
-            </form>
+  /* ---------------------- REDIRECT ---------------------- */
+  if (toWeatherPage) {
+    return <Navigate to="/weather" />;
+  }
 
-            <br/>
-            <br/>
-            <p>Error: {signupError}</p>
+  /* ---------------------- UI ---------------------- */
+
+  return (
+    <div className="auth-page">
+      <div className="auth-card">
+        {/* Logo */}
+        <div className="auth-logo">
+          <span style={{ color: "white", fontSize: "26px", fontWeight: 600 }}>
+            W
+          </span>
         </div>
-    )
 
-};
+        <h2 className="auth-title">WeatherHub</h2>
+        <p className="auth-subtitle">Please log in or create an account</p>
 
+        {/* Tabs */}
+        <div className="auth-tabs">
+          <div
+            className={`auth-tab ${activeTab === "login" ? "active" : ""}`}
+            onClick={() => setActiveTab("login")}
+          >
+            Login
+          </div>
+          <div
+            className={`auth-tab ${activeTab === "signup" ? "active" : ""}`}
+            onClick={() => setActiveTab("signup")}
+          >
+            Sign Up
+          </div>
+        </div>
+
+        {/* ------------------- LOGIN FORM ------------------- */}
+        {activeTab === "login" && (
+          <form className="auth-form" onSubmit={handleLogin}>
+            <label>Email</label>
+            <input
+              type="email"
+              className="auth-input"
+              onChange={(e) => setLoginEmail(e.target.value)}
+            />
+
+            <label>Password</label>
+            <input
+              type="password"
+              className="auth-input"
+              onChange={(e) => setLoginPassword(e.target.value)}
+            />
+
+            <button className="auth-btn" type="submit">
+              Login
+            </button>
+
+            {loginError && <p className="auth-error">{loginError}</p>}
+          </form>
+        )}
+
+        {/* ------------------- SIGNUP FORM ------------------- */}
+        {activeTab === "signup" && (
+          <form className="auth-form" onSubmit={handleSignup}>
+            <label>First Name</label>
+            <input
+              type="text"
+              className="auth-input"
+              onChange={(e) => setSignupFirstName(e.target.value)}
+            />
+
+            <label>Last Name</label>
+            <input
+              type="text"
+              className="auth-input"
+              onChange={(e) => setSignupLastName(e.target.value)}
+            />
+
+            <label>Email</label>
+            <input
+              type="email"
+              className="auth-input"
+              onChange={(e) => setSignupEmail(e.target.value)}
+            />
+
+            <label>Password</label>
+            <input
+              type="password"
+              className="auth-input"
+              onChange={(e) => setSignupPassword(e.target.value)}
+            />
+
+            <button className="auth-btn" type="submit">
+              Create Account
+            </button>
+
+            {signupError && <p className="auth-error">{signupError}</p>}
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default AuthPage;
-
