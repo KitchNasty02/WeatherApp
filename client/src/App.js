@@ -1,15 +1,20 @@
 import React from 'react';
-import './App.css';
-
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AuthPage from './AuthPage';
+import WeatherPage from './WeatherPage'
 
 function App() {
   return (
-    <div className="App">
-      
-      <AuthPage></AuthPage>
+    <BrowserRouter>
+      <Routes>
 
-    </div>
+          <Route path="/" element={<AuthPage/>}/>
+
+          <Route path="/weather" element={<WeatherPage/>}/>
+
+      </Routes>
+    </BrowserRouter>
+
   );
 }
 

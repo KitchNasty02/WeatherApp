@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
 
 const LOGIN_URL = "http://localhost:3010/api/auth/login";
 const SIGNUP_URL = "http://localhost:3010/api/auth/signup";
@@ -16,6 +17,8 @@ function AuthPage() {
 
     const [loginError, setLoginError] = useState("");
     const [signupError, setSignupError] = useState("");
+
+    const [toWeatherPage, setToWeatherPage] = useState(null);
 
 
     // called when user presses login button
@@ -48,6 +51,7 @@ function AuthPage() {
             
             const data = await response.json();
             console.log(data.message);
+            setToWeatherPage(true);
         }
         catch (err) {
             // console.log(err);
@@ -81,14 +85,15 @@ function AuthPage() {
                 })
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                const errData = await response.json(); // wait for backend error messages
-                setSignupError(errData.message);
+                setSignupError(data.message);
                 return;
             }
             
-            const data = await response.json();
             console.log(data.message);
+            setToWeatherPage(true);
         }
         catch (err) {
             // console.log(err);
@@ -97,6 +102,9 @@ function AuthPage() {
         
     }
 
+    if (toWeatherPage) {
+        return <Navigate to="/weather"/>;
+    }
 
     return (
         <div>

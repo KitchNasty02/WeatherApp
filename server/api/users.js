@@ -72,19 +72,33 @@ router.get("/curweather", async (req, res) => {
         appid: WEATHER_API_KEY
     });
 
-    fetch("http://api.openweathermap.org/data/2.5/weather?" + params)
-        .then(response => response.json())
-        .then(data => {
-            const localWeather = {
-                data: data,
-                zip: zip
-            };
+    const weather = await fetch("http://api.openweathermap.org/data/2.5/weather?" + params);
+        
+    if (!weather) {
+        res.status(400).json({message: "Weather API Failed"});
+    }
 
-            res.status(200).json(localWeather);
-        })
-        .catch(err => {
-            res.status(400).json({error: err});
-        });
+    const data = weather.json();
+    const localWeather = {
+        weather: data,
+        zip: zip
+    }
+
+    res.status(200).json(localWeather);
+
+    // fetch("http://api.openweathermap.org/data/2.5/weather?" + params)
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         const localWeather = {
+    //             data: data,
+    //             zip: zip
+    //         };
+
+    //         res.status(200).json(localWeather);
+    //     })
+    //     .catch(err => {
+    //         res.status(400).json({message: err});
+    //     });
 
 });
 
