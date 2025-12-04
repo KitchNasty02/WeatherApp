@@ -1,0 +1,127 @@
+/* ---------- Global Background ---------- */
+.auth-page {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #3ba4ff, #9b3bff);
+  font-family: "Inter", sans-serif;
+}
+
+/* ---------- Card ---------- */
+.auth-card {
+  width: 430px;
+  background: white;
+  padding: 40px 35px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  text-align: center;
+}
+
+/* ---------- Logo ---------- */
+.auth-logo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4d8dff, #b84dff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.auth-logo img {
+  width: 40px;
+  height: 40px;
+}
+
+/* ---------- Title + Subtitle ---------- */
+.auth-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.auth-subtitle {
+  font-size: 14px;
+  color: gray;
+  margin-bottom: 30px;
+}
+
+/* ---------- Tabs (Login / Signup) ---------- */
+.auth-tabs {
+  display: flex;
+  width: 100%;
+  margin-bottom: 25px;
+  background: #e8e8e8;
+  padding: 5px;
+  border-radius: 30px;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 10px 0;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 25px;
+  transition: 0.2s;
+}
+
+.auth-tab.active {
+  background: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* ---------- Form Labels ---------- */
+.auth-form label {
+  text-align: left;
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+/* ---------- Inputs ---------- */
+.auth-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #dedede;
+  border-radius: 10px;
+  background: #f4f4f4;
+  font-size: 15px;
+  margin-bottom: 18px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.auth-input:focus {
+  border-color: #7a4bff;
+  background: white;
+}
+
+/* ---------- Submit Button ---------- */
+.auth-btn {
+  width: 100%;
+  padding: 14px 0;
+  background: linear-gradient(135deg, #3ba4ff, #9b3bff);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.2s;
+}
+
+.auth-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* ---------- Error Messages ---------- */
+.auth-error {
+  color: #d64545;
+  margin-top: 10px;
+  font-size: 14px;
+}
