@@ -5,7 +5,6 @@ const fetch = require("node-fetch");
 require("dotenv").config();
 
 const WEATHER_API_KEY = process.env.API_KEY;
-const WEATHER_API_UNITS = "imperial";
 
 // creates new user on POST request
 router.post("/auth/signup", async (req, res) => {
@@ -65,10 +64,11 @@ router.post("/auth/login", async (req, res) => {
 // returns current weather for specific zip code
 router.get("/curweather", async (req, res) => {
     const zip = req.query.zip;
+    const units = req.query.units;
     // could send units with get or keep in user and change based off that
     const params = new URLSearchParams({
         zip: zip,
-        units: WEATHER_API_UNITS,
+        units: units,
         appid: WEATHER_API_KEY
     });
 

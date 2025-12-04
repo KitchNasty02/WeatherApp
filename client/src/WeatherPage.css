@@ -55,7 +55,7 @@
   padding: 30px 35px;
   border-radius: 18px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  margin-bottom: 80px;
+  margin: 0 auto 80px;
 }
 
 .weather-card h3 {
@@ -123,3 +123,51 @@
   color: rgba(255,255,255,0.8);
   font-size: 20px;
 }
+
+
+
+.weather-details {
+  max-width: 900px;
+  margin: 0 auto 50px;
+  color: white;
+  text-align: center;
+}
+
+.weather-city {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.weather-main {
+  font-size: 18px;
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+
+.weather-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.weather-info-card {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
+  border-radius: 15px;
+  padding: 15px;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.weather-info-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+.weather-info-card img {
+  width: 60px;
+  margin-bottom: 10px;
+}
+
+

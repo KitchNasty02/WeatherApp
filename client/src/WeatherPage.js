@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import "./WeatherPage.css";
 
@@ -9,6 +9,29 @@ function WeatherPage() {
   const [searchError, setSearchError] = useState("");
   const [weatherData, setWeatherData] = useState("");
 
+  const [units, setUnits] = useState("imperial");
+
+  const fetchWeather = async () => {
+        if (!zip) return; // no ZIP, don't fetch
+
+        try {
+            const API_URL = `http://localhost:3010/api/curweather?zip=${zip}&units=${units}`;
+            const response = await fetch(API_URL);
+            const data = await response.json();
+
+            if (!response.ok) {
+                setSearchError(data.message);
+                setWeatherData(null);
+                return;
+            }
+
+            setWeatherData(data.weather);
+            setSearchError("");
+        } catch (err) {
+            setSearchError(err.message);
+        }
+    };
+
   const handleSearch = async (e) => {
     e.preventDefault();
     setZipError("");
@@ -18,21 +41,18 @@ function WeatherPage() {
       return;
     }
 
-    try {
-      const API_URL = `http://localhost:3010/api/curweather?zip=${zip}`;
-      const response = await fetch(API_URL);
-      const data = await response.json();
-
-      if (!response.ok) {
-        setSearchError(data.message);
-        return;
-      }
-
-      setWeatherData(data.weather);
-    } catch (err) {
-      setSearchError(err.message);
-    }
+    fetchWeather();
   };
+
+
+  const handleToggleUnits = () => {
+    setUnits(units === "imperial" ? "metric" : "imperial");
+  }
+
+  useEffect(() => {
+    fetchWeather();
+  }, [units]); // re-run when zip or units change
+
 
   if (logout) return <Navigate to="/" />;
 
@@ -42,15 +62,16 @@ function WeatherPage() {
       <div className="weather-header">
         <div>
           <h1 className="weather-title">WeatherHub</h1>
-          <p className="weather-subtitle">Welcome back, user!</p>
+          <p className="weather-subtitle">Welcome back!</p>
         </div>
 
         <div className="header-right">
-          <button className="header-btn">↻</button>
-          <button className="header-btn">°F / mph</button>
-          <button className="header-btn" onClick={() => setLogout(true)}>
-            Logout
-          </button>
+            <button className="header-btn" onClick={handleToggleUnits}>
+                {units === "imperial" ? "°F / mph" : "°C / km/h"}
+            </button>
+            <button className="header-btn" onClick={() => setLogout(true)}>
+                Logout
+            </button>
         </div>
       </div>
 
@@ -91,10 +112,43 @@ function WeatherPage() {
 
       {/* If weather data exists */}
       {weatherData && (
-        <div style={{ color: "white", fontSize: "24px", textAlign: "center" }}>
-          Temperature: {weatherData.main.temp}°
+        <div className="weather-details">
+            <h2 className="weather-city">{weatherData.name}</h2>
+            <p className="weather-main">
+            {weatherData.weather[0].main} - {weatherData.weather[0].description}
+            </p>
+
+            <div className="weather-info-grid">
+            <div className="weather-info-card">
+                <img
+                src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
+                alt="weather icon"
+                />
+                <p>Temp: {weatherData.main.temp}°{units === "imperial" ? "F" : "C"}</p>
+                <p>Feels Like: {weatherData.main.feels_like}°</p>
+            </div>
+
+            <div className="weather-info-card">
+                <p>Min: {weatherData.main.temp_min}°</p>
+                <p>Max: {weatherData.main.temp_max}°</p>
+            </div>
+
+            <div className="weather-info-card">
+                <p>Humidity: {weatherData.main.humidity}%</p>
+                <p>Pressure: {weatherData.main.pressure} hPa</p>
+            </div>
+
+            <div className="weather-info-card">
+                <p>
+                Wind: {weatherData.wind.speed} {units === "imperial" ? "mph" : "km/h"}
+                </p>
+                <p>Direction: {weatherData.wind.deg}°</p>
+            </div>
+            </div>
         </div>
-      )}
+        )}
+
+
     </div>
   );
 }
