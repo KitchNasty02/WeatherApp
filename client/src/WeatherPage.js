@@ -6,7 +6,6 @@ function WeatherPage() {
   const [logout, setLogout] = useState(null);
   const [zip, setZip] = useState("");
   const [zipError, setZipError] = useState("");
-  const [searchError, setSearchError] = useState("");
   const [weatherData, setWeatherData] = useState("");
 
   const [units, setUnits] = useState("imperial");
@@ -20,15 +19,15 @@ function WeatherPage() {
             const data = await response.json();
 
             if (!response.ok) {
-                setSearchError(data.message);
+                setZipError(data.message);
                 setWeatherData(null);
                 return;
             }
 
             setWeatherData(data.weather);
-            setSearchError("");
+            setZipError("");
         } catch (err) {
-            setSearchError(err.message);
+            setZipError(err.message);
         }
     };
 
@@ -94,7 +93,6 @@ function WeatherPage() {
         </form>
 
         {zipError && <p style={{ color: "red" }}>{zipError}</p>}
-        {searchError && <p style={{ color: "red" }}>{searchError}</p>}
       </div>
 
       {/* Placeholder when no data */}

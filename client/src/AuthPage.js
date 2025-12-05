@@ -4,6 +4,7 @@ import "./AuthPage.css";
 
 const LOGIN_URL = "http://localhost:3010/api/auth/login";
 const SIGNUP_URL = "http://localhost:3010/api/auth/signup";
+const PASSWORD_RE = /^(?=.*[A-Z])(?=.*\d)(?=.*[!$&@#%]).{8,}$/;
 
 function AuthPage() {
   const [activeTab, setActiveTab] = useState("login"); // login or signup
@@ -22,7 +23,6 @@ function AuthPage() {
 
   const [toWeatherPage, setToWeatherPage] = useState(false);
 
-  /* ---------------------- LOGIN HANDLER ---------------------- */
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoginError("");
@@ -51,18 +51,18 @@ function AuthPage() {
     }
   };
 
-  /* ---------------------- SIGNUP HANDLER ---------------------- */
+
   const handleSignup = async (e) => {
     e.preventDefault();
     setSignupError("");
 
-    if (
-      !signupEmail ||
-      !signupPassword ||
-      !signupFirstName ||
-      !signupLastName
-    ) {
+    if (!signupEmail || !signupPassword || !signupFirstName || !signupLastName) {
       setSignupError("Fill in all fields");
+      return;
+    }
+
+    if (!PASSWORD_RE.test(signupPassword)) {
+      setSignupError("Password is invalid (must have at least 8 characters, one capital, one digit, and one special character");
       return;
     }
 
@@ -87,12 +87,10 @@ function AuthPage() {
     }
   };
 
-  /* ---------------------- REDIRECT ---------------------- */
   if (toWeatherPage) {
     return <Navigate to="/weather" />;
   }
 
-  /* ---------------------- UI ---------------------- */
 
   return (
     <div className="auth-page">
@@ -140,11 +138,12 @@ function AuthPage() {
               onChange={(e) => setLoginPassword(e.target.value)}
             />
 
+            {loginError && <p className="auth-error">{loginError}</p>}
+
             <button className="auth-btn" type="submit">
               Login
             </button>
 
-            {loginError && <p className="auth-error">{loginError}</p>}
           </form>
         )}
 
@@ -179,11 +178,12 @@ function AuthPage() {
               onChange={(e) => setSignupPassword(e.target.value)}
             />
 
+            {signupError && <p className="auth-error">{signupError}</p>}
+
             <button className="auth-btn" type="submit">
               Create Account
             </button>
 
-            {signupError && <p className="auth-error">{signupError}</p>}
           </form>
         )}
       </div>
