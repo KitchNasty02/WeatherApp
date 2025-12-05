@@ -156,14 +156,21 @@ function WeatherPage() {
                 <img src="https://cdn-icons-png.flaticon.com/512/709/709612.png" className="stat-icon" />
                 <p className="stat-label">Visibility</p>
                 <p className="stat-value">
-                  {(weatherData.visibility / 1609).toFixed(1)} mi
+                  {units === "imperial"
+                    ? (weatherData.visibility / 1609.34).toFixed(1) + " mi"
+                    : (weatherData.visibility / 1000).toFixed(1) + " km"
+                  }
                 </p>
               </div>
 
               <div className="stat-box">
                 <img src="https://cdn-icons-png.flaticon.com/512/833/833273.png" className="stat-icon" />
                 <p className="stat-label">Pressure</p>
-                <p className="stat-value">{weatherData.main.pressure} hPa</p>
+                <p className="stat-value">
+                  {units === "imperial"
+                    ? (weatherData.main.pressure * 0.02953).toFixed(2) + " inHg"
+                    : weatherData.main.pressure + " hPa"}
+                </p>
               </div>
 
             </div>
