@@ -112,41 +112,66 @@ function WeatherPage() {
 
       {/* If weather data exists */}
       {weatherData && (
-        <div className="weather-details">
-            <h2 className="weather-city">{weatherData.name}</h2>
-            <p className="weather-main">
-            {weatherData.weather[0].main} - {weatherData.weather[0].description}
+        <>
+          <div className="weather-display-card">
+
+            <h2 className="city-name">{weatherData.name}</h2>
+            <p className="weather-expect">
+              {weatherData.weather[0].description.replace(/^\w/, (c) => c.toUpperCase())}
             </p>
 
-            <div className="weather-info-grid">
-            <div className="weather-info-card">
-                <img
-                src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
-                alt="weather icon"
-                />
-                <p>Temp: {weatherData.main.temp}°{units === "imperial" ? "F" : "C"}</p>
-                <p>Feels Like: {weatherData.main.feels_like}°</p>
-            </div>
-
-            <div className="weather-info-card">
-                <p>Min: {weatherData.main.temp_min}°</p>
-                <p>Max: {weatherData.main.temp_max}°</p>
-            </div>
-
-            <div className="weather-info-card">
-                <p>Humidity: {weatherData.main.humidity}%</p>
-                <p>Pressure: {weatherData.main.pressure} hPa</p>
-            </div>
-
-            <div className="weather-info-card">
-                <p>
-                Wind: {weatherData.wind.speed} {units === "imperial" ? "mph" : "km/h"}
+            <div className="weather-center-temp">
+              <img
+                src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@4x.png`}
+                className="weather-big-icon"
+              />
+              <div className="temp-info">
+                <h1 className="temp-big">
+                  {Math.round(weatherData.main.temp)}°{units === "imperial" ? "F" : "C"}
+                </h1>
+                <p className="feels-like">
+                  Feels like {Math.round(weatherData.main.feels_like)}°
                 </p>
-                <p>Direction: {weatherData.wind.deg}°</p>
+              </div>
             </div>
+
+            {/* GRID INFO BOXES */}
+            <div className="weather-stats-grid">
+
+              <div className="stat-box">
+                <img src="https://cdn-icons-png.flaticon.com/512/5024/5024369.png" className="stat-icon" />
+                <p className="stat-label">Wind Speed</p>
+                <p className="stat-value">
+                  {weatherData.wind.speed} {units === "imperial" ? "mph" : "km/h"}
+                </p>
+              </div>
+
+              <div className="stat-box">
+                <img src="https://cdn-icons-png.flaticon.com/512/414/414974.png" className="stat-icon" />
+                <p className="stat-label">Humidity</p>
+                <p className="stat-value">{weatherData.main.humidity}%</p>
+              </div>
+
+              <div className="stat-box">
+                <img src="https://cdn-icons-png.flaticon.com/512/709/709612.png" className="stat-icon" />
+                <p className="stat-label">Visibility</p>
+                <p className="stat-value">
+                  {(weatherData.visibility / 1609).toFixed(1)} mi
+                </p>
+              </div>
+
+              <div className="stat-box">
+                <img src="https://cdn-icons-png.flaticon.com/512/833/833273.png" className="stat-icon" />
+                <p className="stat-label">Pressure</p>
+                <p className="stat-value">{weatherData.main.pressure} hPa</p>
+              </div>
+
             </div>
-        </div>
-        )}
+
+          </div>
+
+        </>
+      )}
 
 
     </div>
