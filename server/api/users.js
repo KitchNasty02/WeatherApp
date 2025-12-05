@@ -26,11 +26,6 @@ router.post("/auth/signup", async (req, res) => {
         dateCreated: Date.now(),
     });
 
-    // newUser.save().then(user => {
-    //     res.status(201).json({message: `${newUser.fname} ${newUser.lname} account was saved`});
-    // }).catch(err => {
-    //     res.status(401).json({error: err});
-    // });
     try {
         const createdUser = await newUser.save();
         res.status(201).json({message: `${createdUser.fname} ${createdUser.lname} account was saved`});
@@ -55,8 +50,9 @@ router.post("/auth/login", async (req, res) => {
         res.status(401).json({message: "Incorrect Password"});
     }
 
+    user.lastLoggedIn = Date.now();
+    await user.save();
     res.status(201).json({message: "User can login"});
-    //TODO CHANGE THE USERS LAST LOGGED IN TIME
 
 });
 
@@ -65,7 +61,7 @@ router.post("/auth/login", async (req, res) => {
 router.get("/curweather", async (req, res) => {
     const zip = req.query.zip;
     const units = req.query.units;
-    // could send units with get or keep in user and change based off that
+
     const params = new URLSearchParams({
         zip: zip,
         units: units,
@@ -75,7 +71,7 @@ router.get("/curweather", async (req, res) => {
     const weather = await fetch("http://api.openweathermap.org/data/2.5/weather?" + params);
         
     if (!weather.ok) {
-        res.status(400).json({message: "Weather API Failed"});
+        res.status(400).json({message: "Invalid Zip Code"});
     }
 
     const data = await weather.json();
@@ -85,20 +81,6 @@ router.get("/curweather", async (req, res) => {
     }
 
     res.status(200).json(localWeather);
-
-    // fetch("http://api.openweathermap.org/data/2.5/weather?" + params)
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         const localWeather = {
-    //             data: data,
-    //             zip: zip
-    //         };
-
-    //         res.status(200).json(localWeather);
-    //     })
-    //     .catch(err => {
-    //         res.status(400).json({message: err});
-    //     });
 
 });
 
